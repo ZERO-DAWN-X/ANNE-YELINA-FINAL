@@ -3,9 +3,21 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// Debug middleware for all product routes
+router.use((req, res, next) => {
+  console.log('Backend Debug - Product Route Request:');
+  console.log('URL:', req.originalUrl);
+  console.log('Method:', req.method);
+  console.log('Headers:', req.headers);
+  console.log('Query:', req.query);
+  console.log('Params:', req.params);
+  next();
+});
+
 // Get all products with filtering
 router.get('/', async (req, res) => {
   try {
+    console.log('Backend Debug - Fetching all products');
     const products = await prisma.product.findMany({
       where: {
         isStocked: true
@@ -32,6 +44,8 @@ router.get('/', async (req, res) => {
       }
     });
     
+    console.log('Backend Debug - Products found:', products.length);
+    
     // Transform the response to match the expected format
     const transformedProducts = products.map(product => ({
       ...product,
@@ -51,10 +65,11 @@ router.get('/', async (req, res) => {
       brandRel: undefined
     }));
     
+    console.log('Backend Debug - Sending response');
     res.json(transformedProducts);
   } catch (error) {
-    console.error('Get products error:', error);
-    console.error('Error details:', error.stack);
+    console.error('Backend Debug - Get products error:', error);
+    console.error('Backend Debug - Error stack:', error.stack);
     res.status(500).json({ 
       message: 'Failed to fetch products',
       error: error.message 
@@ -157,6 +172,8 @@ router.get('/sale', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('Backend Debug - Fetching single product:');
+    console.log('Product ID:', id);
     
     const product = await prisma.product.findUnique({
       where: { id },
@@ -179,7 +196,10 @@ router.get('/:id', async (req, res) => {
       }
     });
     
+    console.log('Backend Debug - Product found:', !!product);
+    
     if (!product) {
+      console.log('Backend Debug - Product not found');
       return res.status(404).json({ 
         message: `Product with ID ${id} not found` 
       });
@@ -208,9 +228,11 @@ router.get('/:id', async (req, res) => {
       brandRel: undefined
     };
     
+    console.log('Backend Debug - Sending transformed product');
     res.json(transformedProduct);
   } catch (error) {
-    console.error('Get product error:', error);
+    console.error('Backend Debug - Get single product error:', error);
+    console.error('Backend Debug - Error stack:', error.stack);
     res.status(500).json({ 
       message: 'Failed to fetch product',
       error: error.message 

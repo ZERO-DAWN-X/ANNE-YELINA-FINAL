@@ -29,18 +29,36 @@ const SingleProductPage = ({ product, error }) => {
   useEffect(() => {
     if (!product && id) {
       setIsLoading(true);
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`)
-        .then(res => res.json())
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      console.log('Frontend Debug - Fetching product data:');
+      console.log('API URL:', apiUrl);
+      console.log('Product ID:', id);
+
+      fetch(`${apiUrl}/api/products/${id}`)
+        .then(res => {
+          console.log('Frontend Debug - Response status:', res.status);
+          return res.json();
+        })
         .then(data => {
+          console.log('Frontend Debug - Received data:', data);
           setClientProduct(data);
           setIsLoading(false);
         })
         .catch(err => {
-          console.error('Error fetching product:', err);
+          console.error('Frontend Debug - Error fetching product:', err);
           setIsLoading(false);
         });
     }
   }, [id, product]);
+
+  // Debug logging for props and state
+  useEffect(() => {
+    console.log('Frontend Debug - Component props/state:');
+    console.log('Product from props:', product);
+    console.log('Client product state:', clientProduct);
+    console.log('Is loading:', isLoading);
+    console.log('Router query:', router.query);
+  }, [product, clientProduct, isLoading, router.query]);
 
   if (router.isFallback || isLoading) {
     return (
@@ -68,22 +86,27 @@ const SingleProductPage = ({ product, error }) => {
 // This function gets called at build time
 export async function getStaticPaths() {
   try {
-    // Fetch the first few products for initial static generation
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    console.log('Frontend Debug - getStaticPaths:');
+    console.log('API URL:', apiUrl);
+
     const res = await fetch(`${apiUrl}/api/products`);
-    const products = await res.json();
+    console.log('Frontend Debug - getStaticPaths response status:', res.status);
     
-    // Get the first 5 products for static generation
+    const products = await res.json();
+    console.log('Frontend Debug - Products count:', products.length);
+    
     const paths = products.slice(0, 5).map((product) => ({
       params: { id: product.id.toString() }
     }));
+    console.log('Frontend Debug - Generated paths:', paths);
 
     return {
       paths,
-      fallback: true // Enable incremental static regeneration
+      fallback: true
     };
   } catch (error) {
-    console.error('Error fetching products for static paths:', error);
+    console.error('Frontend Debug - getStaticPaths error:', error);
     return {
       paths: [],
       fallback: true
@@ -91,9 +114,12 @@ export async function getStaticPaths() {
   }
 }
 
-// This function gets called at build time on server-side
 export async function getStaticProps({ params }) {
+  console.log('Frontend Debug - getStaticProps:');
+  console.log('Params:', params);
+
   if (!params?.id) {
+    console.log('Frontend Debug - No ID provided');
     return {
       notFound: true
     };
@@ -101,23 +127,27 @@ export async function getStaticProps({ params }) {
 
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    console.log('Frontend Debug - API URL:', apiUrl);
+    
     const res = await fetch(`${apiUrl}/api/products/${params.id}`);
+    console.log('Frontend Debug - Response status:', res.status);
     
     if (!res.ok) {
       throw new Error(`Failed to fetch product: ${res.statusText}`);
     }
 
     const product = await res.json();
+    console.log('Frontend Debug - Received product data:', product);
 
     return {
       props: {
         product,
         error: null
       },
-      revalidate: 60 // Regenerate page every 60 seconds if needed
+      revalidate: 60
     };
   } catch (error) {
-    console.error('Error in getStaticProps:', error);
+    console.error('Frontend Debug - getStaticProps error:', error);
     return {
       props: {
         product: null,
