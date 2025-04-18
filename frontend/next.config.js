@@ -10,14 +10,12 @@ const nextConfig = {
     return config
   },
   images: {
-    domains: ['localhost', 'anneyelina.duckdns.org'],
+    domains: ['localhost', 'api.anneyelina.com', 'anneyelina.duckdns.org'],
     unoptimized: true
   },
+  trailingSlash: true,
   output: 'standalone',
-  distDir: '.next',
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
-  }
+  distDir: 'out'
 }
 
 module.exports = nextConfig

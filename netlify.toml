@@ -1,0 +1,12 @@
+[build]
+  base = "frontend"
+  command = "npm install && npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NEXT_PUBLIC_API_URL = "http://anneyelina.duckdns.org"
+  NODE_VERSION = "16"
+  NPM_VERSION = "8" 
