@@ -1,0 +1,56 @@
+// Text animations
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 80px;
+  background-color: #222222;
+  margin-left: 5px;
+  animation: blink 0.7s infinite;
+  position: relative;
+  top: 10px;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.subtext-container {
+  height: 60px; /* Fixed height to prevent layout shifts */
+  position: relative;
+  margin-bottom: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.animated-subtext {
+  position: absolute;
+  width: 100%;
+  animation: fadeInOut 5s ease-in-out;
+  animation-fill-mode: both;
+  font-size: 20px;
+  line-height: 150%;
+  font-family: 'Tenor Sans';
+  margin: 0;
+  padding-left: 10px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+} 

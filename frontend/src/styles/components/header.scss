@@ -1,0 +1,73 @@
+.admin-link {
+  position: relative;
+  
+  a {
+    color: #ff5c00 !important; /* make the admin icon stand out */
+  }
+  
+  .tooltip {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+  }
+  
+  &:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.header-options {
+  li {
+    position: relative;
+    
+    a {
+      position: relative;
+      
+      span {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #d05278;
+        color: #fff;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.icon-heart {
+  &.active {
+    color: #d05278;
+  }
+}
+
+.addList {
+  &.added {
+    background: #d05278;
+    color: #fff;
+    border-color: #d05278;
+    
+    &:hover {
+      background: #c04268;
+      border-color: #c04268;
+    }
+  }
+} 

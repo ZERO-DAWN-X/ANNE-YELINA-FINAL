@@ -1,0 +1,32 @@
+[
+  {
+    "categoryId": "accessories",
+    "name": "Accessories",
+    "image": "/assets/img/top-categories-img1.jpg"
+  },
+  {
+    "categoryId": "nails",
+    "name": "Nails",
+    "image": "/assets/img/top-categories-img2.jpg"
+  },
+  {
+    "categoryId": "body",
+    "name": "Body",
+    "image": "/assets/img/top-categories-img3.jpg"
+  },
+  {
+    "categoryId": "makeup",
+    "name": "Make Up",
+    "image": "/assets/img/top-categories-img4.jpg"
+  },
+  {
+    "categoryId": "skincare",
+    "name": "Skin Care",
+    "image": "/assets/img/top-categories-img5.jpg"
+  },
+  {
+    "categoryId": "haircare",
+    "name": "Hair Care",
+    "image": "/assets/img/top-categories-img6.jpg"
+  }
+]

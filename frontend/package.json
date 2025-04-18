@@ -1,0 +1,39 @@
+{
+  "name": "beshop",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "@react-pdf/renderer": "^4.3.0",
+    "axios": "^1.8.4",
+    "body-scroll-lock": "^4.0.0-beta.0",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
+    "lucide-react": "^0.487.0",
+    "multer": "^1.4.5-lts.2",
+    "next": "12.0.4",
+    "next-connect": "^1.0.0",
+    "rc-slider": "^9.7.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-dropdown": "^1.9.2",
+    "react-feather": "^2.0.10",
+    "react-hot-toast": "^2.5.2",
+    "react-rating-stars-component": "^2.2.0",
+    "react-simple-star-rating": "^4.0.0",
+    "react-slick": "^0.30.3",
+    "react-to-print": "^3.0.5",
+    "sass": "1.26.3",
+    "sharp": "^0.34.1",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.2.6"
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0"
+  }
+}
