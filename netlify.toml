@@ -8,5 +8,5 @@
 
 [build.environment]
   NEXT_PUBLIC_API_URL = "http://anneyelina.duckdns.org"
-  NODE_VERSION = "16"
-  NPM_VERSION = "8" 
+  NODE_VERSION = "18.18"
+  NPM_VERSION = "9" 
