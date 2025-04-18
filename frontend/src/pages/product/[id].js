@@ -86,11 +86,24 @@ const SingleProductPage = ({ product, error }) => {
 // This function gets called at build time
 export async function getStaticPaths() {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
     console.log('Frontend Debug - getStaticPaths:');
-    // Return empty paths during build time
+    console.log('API URL:', apiUrl);
+
+    const res = await fetch(`${apiUrl}/api/products`);
+    console.log('Frontend Debug - getStaticPaths response status:', res.status);
+    
+    const products = await res.json();
+    console.log('Frontend Debug - Products count:', products.length);
+    
+    const paths = products.slice(0, 5).map((product) => ({
+      params: { id: product.id.toString() }
+    }));
+    console.log('Frontend Debug - Generated paths:', paths);
+
     return {
-      paths: [],
-      fallback: true // Enable incremental static regeneration
+      paths,
+      fallback: true
     };
   } catch (error) {
     console.error('Frontend Debug - getStaticPaths error:', error);

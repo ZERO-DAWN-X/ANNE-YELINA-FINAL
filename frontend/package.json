@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
-    "postbuild": "echo 'Build completed'"
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
@@ -33,7 +33,8 @@
     "sharp": "^0.34.1",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.6",
-    "@netlify/plugin-nextjs": "^4.41.3"
+    "@netlify/plugin-nextjs": "^4.41.3",
+    "next-sitemap": "^4.2.3"
   },
   "devDependencies": {
     "css-loader": "^7.1.2",

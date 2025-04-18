@@ -16,15 +16,7 @@ const nextConfig = {
   output: 'standalone',
   distDir: '.next',
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://anneyelina.duckdns.org'
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`
-      }
-    ]
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
   }
 }
 
