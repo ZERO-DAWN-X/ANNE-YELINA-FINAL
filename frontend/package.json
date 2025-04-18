@@ -2,9 +2,11 @@
   "name": "beshop",
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "next export",
+    "postbuild": "echo 'Build completed'"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
@@ -30,10 +32,15 @@
     "sass": "1.26.3",
     "sharp": "^0.34.1",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.2.6"
+    "swiper": "^11.2.6",
+    "@netlify/plugin-nextjs": "^4.41.3"
   },
   "devDependencies": {
     "css-loader": "^7.1.2",
     "style-loader": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
