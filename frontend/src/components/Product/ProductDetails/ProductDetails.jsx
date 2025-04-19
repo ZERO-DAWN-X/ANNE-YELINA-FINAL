@@ -3,10 +3,9 @@ import socialData from 'data/social';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import { getProduct } from 'services/productService';
+import { getProduct } from 'services/productService'; // You'll need to create this
 import { ProductsCarousel } from '../Products/ProductsCarousel';
 import { useWishlist } from 'context/WishlistContext';
-import { fixImageUrl } from '../../../utils/api';
 
 export const ProductDetails = () => {
   const router = useRouter();
@@ -34,19 +33,6 @@ export const ProductDetails = () => {
         setLoading(true);
         setError(null);
         const data = await getProduct(id);
-        
-        // Process any image URLs
-        if (data.image) {
-          data.image = fixImageUrl(data.image);
-        }
-        
-        // Process image gallery if it exists
-        if (data.imageGallery && Array.isArray(data.imageGallery)) {
-          data.imageGallery = data.imageGallery.map(img => {
-            return typeof img === 'string' ? fixImageUrl(img) : img;
-          });
-        }
-        
         setProduct(data);
         setReviews(data.reviews || []);
         setRelatedProducts(data.relatedProducts || []);

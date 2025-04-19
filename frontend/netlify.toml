@@ -1,11 +1,9 @@
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
-[build.environment]
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
-  NEXT_PUBLIC_API_URL = "https://anneyelina.duckdns.org"
-  NEXT_PUBLIC_UPLOADS_URL = "https://anneyelina.duckdns.org/uploads"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [[redirects]]
   from = "/*"

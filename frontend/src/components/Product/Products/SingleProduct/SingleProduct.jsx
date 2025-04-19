@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { fixImageUrl } from '../../../../utils/api';
 
 export const SingleProduct = ({
   product,
@@ -14,9 +13,6 @@ export const SingleProduct = ({
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const { name, oldPrice, price, image, isSale, isNew, id, description } = product;
-
-  // Format image URL
-  const imageUrl = fixImageUrl(image);
 
   // Navigate to product details
   const navigateToProduct = (e) => {
@@ -235,17 +231,7 @@ export const SingleProduct = ({
         </div>
         
         {/* Product image */}
-        <img 
-          src={imageUrl} 
-          alt={name} 
-          style={styles.image} 
-          className="product-image"
-          onError={(e) => {
-            // Fallback if image fails to load
-            e.target.onerror = null;
-            e.target.src = '/assets/img/product-img1.jpg';
-          }}
-        />
+        <img src={image} alt={name} style={styles.image} className="product-image" />
         
         <button className="quick-view">Quick View</button>
       </div>
