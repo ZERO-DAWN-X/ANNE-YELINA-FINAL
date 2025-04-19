@@ -10,24 +10,12 @@ const nextConfig = {
     return config
   },
   images: {
-    domains: [
-      'localhost',
-      'anneyelina.duckdns.org'
-    ],
+    domains: ['localhost', 'anneyelina.duckdns.org'],
     unoptimized: true
   },
   trailingSlash: true,
   output: 'export',
-  distDir: 'out',
-  async redirects() {
-    return [
-      {
-        source: '/uploads/:path*',
-        destination: `${process.env.NEXT_PUBLIC_UPLOADS_URL}/:path*`,
-        permanent: true,
-      },
-    ];
-  }
+  distDir: 'out'
 }
 
 module.exports = nextConfig

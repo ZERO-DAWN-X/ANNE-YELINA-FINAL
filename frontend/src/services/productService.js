@@ -1,9 +1,31 @@
 import api from '../utils/api';
 
+const transformProductData = (product) => {
+  if (!product) return null;
+  
+  return {
+    ...product,
+    image: product.image ? (
+      product.image.startsWith('blob:') 
+        ? null 
+        : product.image.startsWith('/uploads/') 
+          ? `${process.env.NEXT_PUBLIC_UPLOAD_URL}${product.image.substring(8)}`
+          : `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${product.image}`
+    ) : null,
+    imageGallery: Array.isArray(product.imageGallery) 
+      ? product.imageGallery.map(img => 
+          img.startsWith('/uploads/') 
+            ? `${process.env.NEXT_PUBLIC_UPLOAD_URL}${img.substring(8)}`
+            : `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${img}`
+        )
+      : []
+  };
+};
+
 export const getProducts = async (filters = {}) => {
   try {
     const response = await api.get('/api/products', { params: filters });
-    return response.data;
+    return response.data.map(transformProductData);
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;
@@ -13,18 +35,7 @@ export const getProducts = async (filters = {}) => {
 export const getProduct = async (id) => {
   try {
     const response = await api.get(`/api/products/${id}`);
-    const data = response.data;
-    
-    return {
-      ...data,
-      // Ensure category and brand are strings
-      category: typeof data.category === 'object' ? data.category.name : data.category,
-      brand: typeof data.brand === 'object' ? data.brand.name : data.brand,
-      reviews: data.reviews || [],
-      // Keep the full objects if needed
-      categoryData: data.categoryData,
-      brandData: data.brandData
-    };
+    return transformProductData(response.data);
   } catch (error) {
     console.error('Error fetching product:', error);
     throw error;

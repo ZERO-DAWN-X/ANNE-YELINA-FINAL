@@ -408,24 +408,26 @@ export const ProductDetails = () => {
   // Combine main image with gallery for slider
   const allImages = [image, ...(imageGallery || [])].filter(Boolean);
 
-  const getImageUrl = (imagePath) => {
-    // If image is a blob URL, return as is
-    if (imagePath?.startsWith('blob:')) {
-      return imagePath;
-    }
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return '/assets/img/product-img1.jpg'; // fallback image
     
-    // If image is an absolute URL, return as is
-    if (imagePath?.startsWith('http')) {
-      return imagePath;
+    // Handle blob URLs
+    if (imageUrl.startsWith('blob:')) {
+      return '/assets/img/product-img1.jpg'; // fallback for blob URLs
     }
-    
-    // If image starts with /uploads, add the base URL
-    if (imagePath?.startsWith('/uploads/')) {
-      return `${process.env.NEXT_PUBLIC_UPLOADS_URL}${imagePath.substring(8)}`;
+
+    // Handle relative URLs
+    if (imageUrl.startsWith('/uploads/')) {
+      return `${process.env.NEXT_PUBLIC_UPLOAD_URL}${imageUrl.substring(8)}`;
     }
-    
-    // For relative paths, add the base uploads URL
-    return imagePath ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${imagePath}` : '';
+
+    // Handle full URLs
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+
+    // Handle relative path without /uploads/
+    return `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${imageUrl}`;
   };
 
   return (
