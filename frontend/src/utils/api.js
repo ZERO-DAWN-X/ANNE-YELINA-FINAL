@@ -10,19 +10,28 @@ const api = axios.create({
 
 // Helper function to fix image URLs
 export const fixImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
+  if (!imageUrl) return '/assets/img/product-img1.jpg'; // Default fallback image
   
   // Handle blob URLs
   if (imageUrl.startsWith('blob:')) {
-    // Extract the filename if possible
-    const parts = imageUrl.split('/');
-    const filename = parts[parts.length - 1];
-    return `${process.env.NEXT_PUBLIC_API_URL}/uploads/${filename}`;
+    // For blob URLs, we need to extract the filename or use a fallback
+    // Since blob URLs are temporary, we need to replace with server URLs
+    return '/assets/img/product-img1.jpg';
   }
   
   // Handle relative URLs
   if (imageUrl.startsWith('/uploads/')) {
     return `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`;
+  }
+  
+  // Handle uploads without leading slash
+  if (imageUrl.startsWith('uploads/')) {
+    return `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`;
+  }
+  
+  // If it's a path to a specific image on the server
+  if (imageUrl.includes('c-174') || imageUrl.match(/\d{13,}-\d{6,}\.jpg$/)) {
+    return `${process.env.NEXT_PUBLIC_API_URL}/uploads/${imageUrl}`;
   }
   
   // If it's already a full URL

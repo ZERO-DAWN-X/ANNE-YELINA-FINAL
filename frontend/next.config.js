@@ -13,8 +13,8 @@ const nextConfig = {
     domains: ['localhost', 'anneyelina.duckdns.org'],
     unoptimized: true
   },
-  trailingSlash: true,
   output: 'export',
+  trailingSlash: true,
   distDir: 'out'
 }
 
