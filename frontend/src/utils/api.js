@@ -6,8 +6,33 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true
 });
+
+// Helper function to fix image URLs
+export const fixImageUrl = (imageUrl) => {
+  if (!imageUrl) return '';
+  
+  // Handle blob URLs
+  if (imageUrl.startsWith('blob:')) {
+    // Extract the filename if possible
+    const parts = imageUrl.split('/');
+    const filename = parts[parts.length - 1];
+    return `${process.env.NEXT_PUBLIC_API_URL}/uploads/${filename}`;
+  }
+  
+  // Handle relative URLs
+  if (imageUrl.startsWith('/uploads/')) {
+    return `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`;
+  }
+  
+  // If it's already a full URL
+  if (imageUrl.startsWith('http')) {
+    return imageUrl;
+  }
+  
+  // Default case - assume it's a relative path
+  return `${process.env.NEXT_PUBLIC_API_URL}/uploads/${imageUrl}`;
+};
 
 // Add request interceptor to attach auth token if available
 api.interceptors.request.use(
@@ -25,26 +50,7 @@ api.interceptors.request.use(
 
 // Add response interceptor for error handling
 api.interceptors.response.use(
-  (response) => {
-    if (response.data && response.data.image) {
-      // Transform image URLs in responses
-      const transformImageUrl = (url) => {
-        if (!url) return url;
-        if (url.startsWith('blob:')) return null;
-        if (url.startsWith('/uploads/')) {
-          return `${process.env.NEXT_PUBLIC_UPLOAD_URL}${url.substring(8)}`;
-        }
-        if (url.startsWith('http')) return url;
-        return `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${url}`;
-      };
-
-      response.data.image = transformImageUrl(response.data.image);
-      if (response.data.imageGallery) {
-        response.data.imageGallery = response.data.imageGallery.map(transformImageUrl);
-      }
-    }
-    return response;
-  },
+  (response) => response,
   (error) => {
     // Handle common errors like 401 Unauthorized
     if (error.response && error.response.status === 401) {
