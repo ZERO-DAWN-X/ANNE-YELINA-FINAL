@@ -2,11 +2,9 @@
   "name": "beshop",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "export": "next export",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",

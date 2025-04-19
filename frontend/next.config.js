@@ -13,8 +13,7 @@ const nextConfig = {
     domains: ['anneyelina.duckdns.org', 'localhost'],
     unoptimized: true
   },
-  output: 'export',
-  distDir: 'out',
+  trailingSlash: true,
   env: {
     NEXT_PUBLIC_UPLOAD_URL: 'http://anneyelina.duckdns.org/uploads'
   }
