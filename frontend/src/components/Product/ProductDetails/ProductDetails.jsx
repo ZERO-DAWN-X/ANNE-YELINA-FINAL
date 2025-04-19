@@ -3,25 +3,9 @@ import socialData from 'data/social';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import { getProduct } from 'services/productService';
+import { getProduct } from 'services/productService'; // You'll need to create this
 import { ProductsCarousel } from '../Products/ProductsCarousel';
 import { useWishlist } from 'context/WishlistContext';
-import Image from 'next/image';
-
-// Helper function to get full image URL
-const getImageUrl = (imagePath) => {
-  if (!imagePath) return '';
-  if (imagePath.startsWith('blob:')) {
-    return imagePath.replace('blob:http://localhost:3000', process.env.NEXT_PUBLIC_UPLOAD_URL);
-  }
-  if (imagePath.startsWith('/uploads/')) {
-    return `${process.env.NEXT_PUBLIC_UPLOAD_URL}${imagePath}`;
-  }
-  if (imagePath.startsWith('http')) {
-    return imagePath;
-  }
-  return `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${imagePath}`;
-};
 
 export const ProductDetails = () => {
   const router = useRouter();
@@ -49,23 +33,14 @@ export const ProductDetails = () => {
         setLoading(true);
         setError(null);
         const data = await getProduct(id);
-        
-        // Transform image URLs
-        const transformedData = {
-          ...data,
-          image: getImageUrl(data.image),
-          imageGallery: Array.isArray(data.imageGallery) 
-            ? data.imageGallery.map(img => getImageUrl(img))
-            : []
-        };
-        
-        setProduct(transformedData);
+        setProduct(data);
         setReviews(data.reviews || []);
         setRelatedProducts(data.relatedProducts || []);
       } catch (err) {
         console.error('Error fetching product:', err);
         setError(err.response?.data?.message || 'Failed to load product details');
         
+        // Redirect to 404 page if product not found
         if (err.response?.status === 404) {
           router.push('/404');
         }
@@ -180,13 +155,6 @@ export const ProductDetails = () => {
       display: 'flex',
       flexDirection: 'column',
       gap: '16px',
-    },
-    mainImageContainer: {
-      width: '100%',
-      height: 'auto',
-      aspectRatio: '1/1',
-      objectFit: 'cover',
-      backgroundColor: '#f8f8f8',
     },
     mainImage: {
       width: '100%',
@@ -458,44 +426,28 @@ export const ProductDetails = () => {
       >
         {/* Left Column - Images */}
         <div style={styles.imageColumn}>
-          <div style={styles.mainImageContainer}>
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={600}
-              height={600}
-              style={styles.mainImage}
-              onError={(e) => {
-                console.error('Image load error:', e);
-                e.target.src = '/placeholder.jpg'; // Add a placeholder image
-              }}
-            />
-          </div>
+          <img 
+            src={allImages[mainImageIndex]} 
+            alt={name} 
+            style={styles.mainImage}
+            className="product-main-image"
+          />
           
-          {product.imageGallery && product.imageGallery.length > 0 && (
-            <div style={styles.thumbnailContainer}>
-              <Slider {...gallerySettings}>
-                {product.imageGallery.map((img, index) => (
-                  <div key={index} onClick={() => setMainImageIndex(index)}>
-                    <Image
-                      src={img}
-                      alt={`${product.name} - ${index + 1}`}
-                      width={80}
-                      height={80}
-                      style={{
-                        ...styles.thumbnail,
-                        ...(mainImageIndex === index && styles.thumbnailActive)
-                      }}
-                      onError={(e) => {
-                        console.error('Thumbnail load error:', e);
-                        e.target.src = '/placeholder.jpg';
-                      }}
-                    />
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          )}
+          <div style={styles.thumbnailContainer}>
+            {allImages.slice(0, 5).map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`${name} thumbnail ${index + 1}`}
+                style={{
+                  ...styles.thumbnail,
+                  ...(mainImageIndex === index ? styles.thumbnailActive : {})
+                }}
+                onClick={() => setMainImageIndex(index)}
+                className={`product-thumbnail ${mainImageIndex === index ? 'active' : ''}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Right Column - Product Info */}
