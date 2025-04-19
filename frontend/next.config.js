@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   transpilePackages: ['jspdf', 'jspdf-autotable'],
   webpack: (config) => {
     config.resolve.alias = {
@@ -11,16 +10,24 @@ const nextConfig = {
     return config
   },
   images: {
-    domains: ['anneyelina.duckdns.org', 'localhost'],
+    domains: [
+      'localhost',
+      'anneyelina.duckdns.org'
+    ],
     unoptimized: true
   },
   trailingSlash: true,
-  env: {
-    NEXT_PUBLIC_UPLOAD_URL: 'http://anneyelina.duckdns.org/uploads'
-  },
-  // Add these to ensure proper asset handling
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/' : '',
-  reactStrictMode: true,
+  output: 'export',
+  distDir: 'out',
+  async redirects() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: `${process.env.NEXT_PUBLIC_UPLOADS_URL}/:path*`,
+        permanent: true,
+      },
+    ];
+  }
 }
 
 module.exports = nextConfig

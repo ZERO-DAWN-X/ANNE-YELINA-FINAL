@@ -306,30 +306,6 @@ const ProductForm = ({
   //   }));
   // };
 
-  const handleImageUpload = async (file) => {
-    try {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/upload`, {
-        method: 'POST',
-        credentials: 'include', // Important for auth
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-
-      const data = await response.json();
-      // Return the full URL
-      return `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${data.filename}`;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw error;
-    }
-  };
-
   const changeImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -342,17 +318,32 @@ const ProductForm = ({
         image: previewUrl
       }));
 
-      // Handle image upload
-      const imageUrl = await handleImageUpload(file);
+      // Prepare form data
+      const uploadData = new FormData();
+      uploadData.append('image', file);
 
-      // Update form data
-      setFormData(prev => ({
-        ...prev,
-        image: imageUrl
-      }));
-      
-      // Cleanup preview URL
-      URL.revokeObjectURL(previewUrl);
+      // Fix the API endpoint URL
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/upload`, {
+        method: 'POST',
+        body: uploadData
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.url) {
+        // Update with server URL
+        setFormData(prev => ({
+          ...prev,
+          image: data.url
+        }));
+        
+        // Cleanup preview URL
+        URL.revokeObjectURL(previewUrl);
+      }
     } catch (error) {
       console.error('Error uploading image:', error);
       // Keep the preview URL if upload fails

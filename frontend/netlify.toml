@@ -1,18 +1,21 @@
 [build]
-  base = "frontend"
-  command = "npm run build"
-  publish = ".next"
+  command = "npm run build:prod"
+  publish = "out"
+
+[build.environment]
+  NEXT_PUBLIC_API_URL = "http://anneyelina.duckdns.org"
+  NEXT_PUBLIC_UPLOADS_URL = "http://anneyelina.duckdns.org/uploads"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Remove the redirect rule that's causing issues
-# [[redirects]]
-#   from = "/*"
-#   to = "/index.html"
-#   status = 200 
+[[redirects]]
+  from = "/uploads/*"
+  to = "http://anneyelina.duckdns.org/uploads/:splat"
+  status = 200
+  force = true
 
-[build.environment]
-  NEXT_USE_NETLIFY_EDGE = "true"
-  NODE_VERSION = "18"
-  NEXT_TELEMETRY_DISABLED = "1" 
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*" 

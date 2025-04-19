@@ -7,32 +7,6 @@ import { getProduct } from 'services/productService'; // You'll need to create t
 import { ProductsCarousel } from '../Products/ProductsCarousel';
 import { useWishlist } from 'context/WishlistContext';
 
-const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
-  
-  // Handle blob URLs
-  if (imageUrl.startsWith('blob:')) {
-    return imageUrl.replace('blob:http://localhost:3000', 'http://anneyelina.duckdns.org/uploads');
-  }
-  
-  // Handle relative paths
-  if (imageUrl.startsWith('/uploads')) {
-    return `http://anneyelina.duckdns.org${imageUrl}`;
-  }
-  
-  // Handle full URLs
-  if (imageUrl.includes('anneyelina.duckdns.org')) {
-    return imageUrl;
-  }
-  
-  // Handle local uploads
-  if (imageUrl.startsWith('http://localhost:')) {
-    return imageUrl.replace('http://localhost:5000', 'http://anneyelina.duckdns.org');
-  }
-  
-  return `http://anneyelina.duckdns.org/uploads/${imageUrl}`;
-};
-
 export const ProductDetails = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -434,6 +408,26 @@ export const ProductDetails = () => {
   // Combine main image with gallery for slider
   const allImages = [image, ...(imageGallery || [])].filter(Boolean);
 
+  const getImageUrl = (imagePath) => {
+    // If image is a blob URL, return as is
+    if (imagePath?.startsWith('blob:')) {
+      return imagePath;
+    }
+    
+    // If image is an absolute URL, return as is
+    if (imagePath?.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // If image starts with /uploads, add the base URL
+    if (imagePath?.startsWith('/uploads/')) {
+      return `${process.env.NEXT_PUBLIC_UPLOADS_URL}${imagePath.substring(8)}`;
+    }
+    
+    // For relative paths, add the base uploads URL
+    return imagePath ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${imagePath}` : '';
+  };
+
   return (
     <div style={styles.productContainer}>
       {/* Breadcrumbs */}
@@ -453,7 +447,7 @@ export const ProductDetails = () => {
         {/* Left Column - Images */}
         <div style={styles.imageColumn}>
           <img 
-            src={getImageUrl(product.image)}
+            src={getImageUrl(image)} 
             alt={name} 
             style={styles.mainImage}
             className="product-main-image"

@@ -2,10 +2,10 @@
   "name": "beshop",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next",
+    "build": "cross-env NODE_ENV=production next build",
+    "build:prod": "cross-env NODE_ENV=production NEXT_PUBLIC_API_URL=http://anneyelina.duckdns.org NEXT_PUBLIC_UPLOADS_URL=http://anneyelina.duckdns.org/uploads next build",
+    "start": "next start"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
