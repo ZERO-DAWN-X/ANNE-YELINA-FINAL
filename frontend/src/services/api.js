@@ -43,4 +43,32 @@ api.interceptors.response.use(
   }
 );
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Authorization': `Bearer ${token}`,
+  };
+};
+
+export const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/upload`, {
+    method: 'POST',
+    headers: {
+      ...getAuthHeaders(),
+    },
+    credentials: 'include',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Upload failed');
+  }
+
+  const data = await response.json();
+  return data.filename;
+};
+
 export default api; 

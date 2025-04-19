@@ -7,6 +7,32 @@ import { getProduct } from 'services/productService'; // You'll need to create t
 import { ProductsCarousel } from '../Products/ProductsCarousel';
 import { useWishlist } from 'context/WishlistContext';
 
+const getImageUrl = (imageUrl) => {
+  if (!imageUrl) return '';
+  
+  // Handle blob URLs
+  if (imageUrl.startsWith('blob:')) {
+    return imageUrl.replace('blob:http://localhost:3000', 'http://anneyelina.duckdns.org/uploads');
+  }
+  
+  // Handle relative paths
+  if (imageUrl.startsWith('/uploads')) {
+    return `http://anneyelina.duckdns.org${imageUrl}`;
+  }
+  
+  // Handle full URLs
+  if (imageUrl.includes('anneyelina.duckdns.org')) {
+    return imageUrl;
+  }
+  
+  // Handle local uploads
+  if (imageUrl.startsWith('http://localhost:')) {
+    return imageUrl.replace('http://localhost:5000', 'http://anneyelina.duckdns.org');
+  }
+  
+  return `http://anneyelina.duckdns.org/uploads/${imageUrl}`;
+};
+
 export const ProductDetails = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -427,7 +453,7 @@ export const ProductDetails = () => {
         {/* Left Column - Images */}
         <div style={styles.imageColumn}>
           <img 
-            src={allImages[mainImageIndex]} 
+            src={getImageUrl(product.image)}
             alt={name} 
             style={styles.mainImage}
             className="product-main-image"
@@ -437,7 +463,7 @@ export const ProductDetails = () => {
             {allImages.slice(0, 5).map((img, index) => (
               <img
                 key={index}
-                src={img}
+                src={getImageUrl(img)}
                 alt={`${name} thumbnail ${index + 1}`}
                 style={{
                   ...styles.thumbnail,
