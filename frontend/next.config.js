@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['jspdf', 'jspdf-autotable'],
+  images: {
+    domains: ['anneyelina.duckdns.org', 'localhost'],
+    unoptimized: true,
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -9,12 +13,12 @@ const nextConfig = {
     }
     return config
   },
-  images: {
-    domains: ['localhost', 'api.anneyelina.com', 'anneyelina.duckdns.org'],
-    unoptimized: true
+  env: {
+    NEXT_PUBLIC_UPLOAD_URL: 'http://anneyelina.duckdns.org/uploads',
+    NEXT_PUBLIC_API_URL: 'http://anneyelina.duckdns.org'
   },
   trailingSlash: true,
-  output: 'standalone',
+  output: 'export',
   distDir: 'out'
 }
 

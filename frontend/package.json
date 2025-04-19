@@ -1,15 +1,10 @@
 {
   "name": "beshop",
   "private": true,
-  "engines": {
-    "node": ">=18.18",
-    "npm": ">=9"
-  },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
